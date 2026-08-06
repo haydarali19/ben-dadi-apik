@@ -310,7 +310,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-1', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-1', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Renovasi Hunian</div>
+                    <div class="slider-caption">
+                        <h4>Renovasi Hunian</h4>
+                        <div class="slider-desc">Layanan renovasi menyeluruh yang mencakup perbaikan struktur atap, perombakan layout ruangan, hingga penyegaran interior untuk menghadirkan nuansa rumah idaman yang fungsional dan estetis. Kami bekerja secara efisien dengan hasil maksimal sesuai visi Anda.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
                 <!-- Card 2 -->
                 <div class="slider-card fade-in">
@@ -323,7 +327,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-2', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-2', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Konstruksi Umum</div>
+                    <div class="slider-caption">
+                        <h4>Konstruksi Umum</h4>
+                        <div class="slider-desc">Proyek konstruksi skala umum untuk pembangunan gedung baru, mulai dari penggalian lahan, pengecoran pondasi kuat, hingga pendirian struktur baja atau beton tingkat tinggi. Kami menjamin standar keselamatan dan durabilitas terbaik.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
                 <!-- Card 3 -->
                 <div class="slider-card fade-in">
@@ -336,7 +344,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-3', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-3', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Pembangunan Dasar</div>
+                    <div class="slider-caption">
+                        <h4>Pembangunan Dasar</h4>
+                        <div class="slider-desc">Pekerjaan dasar yang krusial seperti pembersihan lahan (land clearing), pembuangan puing secara profesional, dan persiapan tanah sebelum tahap pendirian bangunan dimulai. Langkah awal untuk memastikan pondasi tidak terganggu.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
                 <!-- Card 4 -->
                 <div class="slider-card fade-in">
@@ -349,7 +361,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-4', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-4', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Sistem Elektrikal</div>
+                    <div class="slider-caption">
+                        <h4>Sistem Elektrikal</h4>
+                        <div class="slider-desc">Pemasangan jalur kabel baru, panel listrik (MCB), perbaikan arus pendek, hingga setup pencahayaan modern (lighting) baik untuk rumah tinggal, ruko, maupun bangunan industri agar sistem kelistrikan aman dan optimal.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
                 <!-- Card 5 -->
                 <div class="slider-card fade-in">
@@ -362,7 +378,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-5', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-5', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Instalasi Plumbing</div>
+                    <div class="slider-caption">
+                        <h4>Instalasi Plumbing</h4>
+                        <div class="slider-desc">Perancangan dan pemasangan jalur pipa air bersih, saluran pembuangan limbah, hingga sistem sanitasi kamar mandi dan kitchen set. Menjamin bebas dari risiko mampet atau kebocoran jangka panjang yang merepotkan.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
                 <!-- Card 6 -->
                 <div class="slider-card fade-in">
@@ -375,7 +395,11 @@
                         <button class="slider-btn prev" onclick="moveSlide('slider-6', -1)">&#10094;</button>
                         <button class="slider-btn next" onclick="moveSlide('slider-6', 1)">&#10095;</button>
                     </div>
-                    <div class="slider-caption">Penyejuk Udara</div>
+                    <div class="slider-caption">
+                        <h4>Penyejuk Udara</h4>
+                        <div class="slider-desc">Layanan teknis untuk survei letak kompresor, instalasi pipa tembaga (freon) yang tertanam rapi di dalam dinding, serta pemasangan unit AC Split maupun sentral agar distribusi dingin merata ke seluruh ruangan.</div>
+                        <button class="toggle-desc-btn" onclick="toggleCaption(this)">Baca Selengkapnya</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -533,6 +557,18 @@
             
             track.dataset.index = currentIndex;
             track.style.transform = `translateX(-${(currentIndex * 100) / 3}%)`;
+        }
+
+        // Expand/Collapse Caption Logic
+        function toggleCaption(btn) {
+            const desc = btn.previousElementSibling;
+            desc.classList.toggle('expanded');
+            
+            if (desc.classList.contains('expanded')) {
+                btn.textContent = 'Tutup';
+            } else {
+                btn.textContent = 'Baca Selengkapnya';
+            }
         }
     </script>
 </body>
