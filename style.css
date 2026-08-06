@@ -234,7 +234,8 @@ nav {
 
 .hero-tagline {
     font-family: var(--font-mono);
-    color: var(--steel-gray);
+    color: var(--white);
+    font-weight: 500;
     font-size: 1rem;
     margin-bottom: 20px;
     display: block;
