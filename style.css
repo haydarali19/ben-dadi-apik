@@ -195,8 +195,9 @@ nav {
 /* --- Hero Section --- */
 .hero {
     background-color: var(--blueprint-navy);
-    background-image: var(--blueprint-grid);
-    background-size: 30px 30px;
+    background-image: url('src/hero-img.jpeg');
+    background-size: cover;
+    background-position: center;
     color: var(--white);
     padding: 120px 0 100px;
     position: relative;
@@ -204,18 +205,31 @@ nav {
     border-bottom: 5px solid var(--safety-orange);
 }
 
+/* Dark overlay with reduced opacity so text stays readable */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(15, 42, 74, 0.72);
+    background-image: var(--blueprint-grid);
+    background-size: 30px 30px;
+    z-index: 1;
+}
+
+/* Inner border decoration */
 .hero::before {
     content: '';
     position: absolute;
     top: 20px; left: 20px; right: 20px; bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     pointer-events: none;
+    z-index: 2;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 750px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
 }
 
 .hero-tagline {
@@ -548,6 +562,19 @@ footer {
     
     .hero h1 { font-size: 2.5rem; }
     .hero { padding: 80px 0 60px; }
+    
+    .hero-inner { flex-direction: column; text-align: center; }
+    .hero-image { justify-content: center; margin-top: 40px; }
+    .hero-tagline { 
+        margin-left: auto; 
+        margin-right: auto; 
+        width: fit-content; 
+        border-left: none; 
+        border-bottom: 2px solid var(--safety-orange); 
+        padding-left: 0; 
+        padding-bottom: 5px; 
+    }
+    .hero-btns { justify-content: center; }
     .features-grid { grid-template-columns: 1fr; }
     .gallery-grid { grid-template-columns: 1fr; }
     .service-card { padding: 25px; }
