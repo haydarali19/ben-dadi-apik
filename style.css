@@ -618,12 +618,20 @@ footer {
     background-color: rgba(255, 255, 255, 0.02);
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
 .services .slider-container {
     aspect-ratio: auto;
     border-radius: 8px;
     border: 1px solid rgba(0,0,0,0.1);
+    padding: 15px;
+    background-color: var(--white);
 }
 
 .slide-group {
@@ -729,40 +737,175 @@ footer {
     color: var(--white);
 }
 
-/* --- Mitra / Klien Section --- */
-.clients {
-    padding: 60px 0;
+/* --- Testimonials Section --- */
+.testimonials {
+    padding: 80px 0;
     background-color: var(--off-white);
 }
 
-.clients-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
 }
 
-.client-logo {
-    width: 150px;
-    height: 80px;
-    background-color: rgba(0, 0, 0, 0.05);
+/* Testimonial Carousel */
+.testimonial-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0 20px;
+}
+
+.testimonial-track {
+    display: flex;
+    gap: 20px;
+    align-items: stretch; /* Memastikan semua kartu sama tinggi */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.testimonial-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 30px;
+}
+
+.testi-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid var(--blueprint-navy);
+    background: transparent;
+    color: var(--blueprint-navy);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testi-btn:hover:not(:disabled) {
+    background: var(--blueprint-navy);
+    color: var(--white);
+}
+
+.testi-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.testi-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.testi-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--steel-gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+}
+
+.testi-dot.active {
+    background: var(--safety-orange);
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+
+.testimonial-card {
+    background-color: var(--white);
+    padding: 30px;
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--steel-gray);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    text-align: center;
-    border: 1px dashed var(--steel-gray);
-    transition: transform 0.3s ease;
+    flex-direction: column;
+    /* height: 100%; (dihapus supaya ikut stretch container) */
+    transform: scale(0.9);
+    opacity: 0.6;
+    transition: transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
 }
 
-.client-logo:hover {
-    transform: translateY(-5px);
-    border-color: var(--safety-orange);
+.testimonial-card.center-card {
+    transform: scale(1.05);
+    opacity: 1;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.testimonial-card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.testimonial-text {
+    flex-grow: 1;
+    font-style: italic;
+    color: var(--dark-gray);
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.testimonial-text::before {
+    content: '"';
+    font-size: 4rem;
     color: var(--safety-orange);
+    opacity: 0.2;
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-family: var(--font-heading);
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.testimonial-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--safety-orange);
+}
+
+.testimonial-info h4 {
+    margin-bottom: 2px;
+    color: var(--blueprint-navy);
+}
+
+.testimonial-info p {
+    font-size: 0.85rem;
+    color: var(--steel-gray);
+    margin: 0;
+}
+
+/* Skeleton Loading Animation */
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+    0% { background-color: hsl(200, 20%, 80%); }
+    100% { background-color: hsl(200, 20%, 95%); }
+}
+
+.skeleton-text {
+    width: 100%;
+    height: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.skeleton-text:last-child {
+    width: 80%;
 }
 
 @media (max-width: 992px) {
