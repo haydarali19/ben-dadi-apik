@@ -199,24 +199,53 @@ async function renderKontak() {
     });
 }
 
+// Ambil pengaturan show/hide section dari sheet "Pengaturan"
+async function fetchPengaturan() {
+    const defaults = { showPortofolio: true, showTestimoni: true };
+    const data = await fetchCMSData("Pengaturan");
+    if (!data || data.length === 0) return defaults;
+
+    data.forEach(item => {
+        const key   = String(item.Pengaturan || '').trim().toLowerCase();
+        const nilai = String(item.Nilai || '').trim().toUpperCase();
+        if (key.includes('portofolio')) defaults.showPortofolio = (nilai === 'TRUE');
+        if (key.includes('testimoni'))  defaults.showTestimoni  = (nilai === 'TRUE');
+    });
+    return defaults;
+}
+
 // Run when DOM is fully loaded (safe for bottom-of-body scripts)
-function initCMS() {
-    if (typeof CMS_URL !== 'undefined' && !CMS_URL.includes("CONTOH")) {
-        renderPortofolio();
-        renderTestimoni();
+async function initCMS() {
+    const hasCMS = typeof CMS_URL !== 'undefined' && !CMS_URL.includes("CONTOH");
+
+    // Baca pengaturan dari Sheets (jika ada CMS), fallback ke tampil semua
+    const config = hasCMS ? await fetchPengaturan() : { showPortofolio: true, showTestimoni: true };
+
+    // --- Terapkan visibilitas section ---
+    const sectionPorto = document.getElementById("galeri");
+    const sectionTesti = document.getElementById("testimoni");
+    if (sectionPorto) sectionPorto.style.display = config.showPortofolio ? '' : 'none';
+    if (sectionTesti) sectionTesti.style.display  = config.showTestimoni  ? '' : 'none';
+
+    if (hasCMS) {
+        if (config.showPortofolio) renderPortofolio();
+        if (config.showTestimoni)  renderTestimoni();
         renderKontak();
     } else {
-        // Show static portfolio if no CMS
-        const portContainer = document.getElementById("portfolio-container");
-        const portSkeleton = document.getElementById("portfolio-skeleton");
-        if (portContainer && portSkeleton) {
-            portSkeleton.style.display = 'none';
-            portContainer.style.display = 'grid';
+        // Tidak ada CMS — tampilkan static portfolio jika section aktif
+        if (config.showPortofolio) {
+            const portContainer = document.getElementById("portfolio-container");
+            const portSkeleton  = document.getElementById("portfolio-skeleton");
+            if (portContainer && portSkeleton) {
+                portSkeleton.style.display = 'none';
+                portContainer.style.display = 'grid';
+            }
         }
-        
-        // Hide Testimoni skeleton
-        const testiSkeleton = document.getElementById("testimonial-skeleton");
-        if (testiSkeleton) testiSkeleton.style.display = 'none';
+        // Sembunyikan skeleton testimoni jika section tidak aktif
+        if (!config.showTestimoni) {
+            const testiSkeleton = document.getElementById("testimonial-skeleton");
+            if (testiSkeleton) testiSkeleton.style.display = 'none';
+        }
     }
 }
 
