@@ -199,29 +199,23 @@ async function renderKontak() {
     });
 }
 
-// Ambil pengaturan show/hide section dari sheet "Pengaturan"
-async function fetchPengaturan() {
-    const defaults = { showPortofolio: true, showTestimoni: true };
-    const data = await fetchCMSData("Pengaturan");
-    if (!data || data.length === 0) return defaults;
+const PENGATURAN_CACHE_KEY = 'bda_pengaturan_cache';
 
+// Parse data Sheets menjadi objek config
+function parsePengaturan(data) {
+    const config = { showPortofolio: true, showTestimoni: true };
+    if (!data || data.length === 0) return config;
     data.forEach(item => {
         const key   = String(item.Pengaturan || '').trim().toLowerCase();
         const nilai = String(item.Nilai || '').trim().toUpperCase();
-        if (key.includes('portofolio')) defaults.showPortofolio = (nilai === 'TRUE');
-        if (key.includes('testimoni'))  defaults.showTestimoni  = (nilai === 'TRUE');
+        if (key.includes('portofolio')) config.showPortofolio = (nilai === 'TRUE');
+        if (key.includes('testimoni'))  config.showTestimoni  = (nilai === 'TRUE');
     });
-    return defaults;
+    return config;
 }
 
-// Run when DOM is fully loaded (safe for bottom-of-body scripts)
-async function initCMS() {
-    const hasCMS = typeof CMS_URL !== 'undefined' && !CMS_URL.includes("CONTOH");
-
-    // Baca pengaturan dari Sheets (jika ada CMS), fallback ke tampil semua
-    const config = hasCMS ? await fetchPengaturan() : { showPortofolio: true, showTestimoni: true };
-
-    // --- Terapkan visibilitas section ---
+// Terapkan config ke DOM (show/hide section)
+function applyConfig(config, hasCMS) {
     const sectionPorto = document.getElementById("galeri");
     const sectionTesti = document.getElementById("testimoni");
     if (sectionPorto) sectionPorto.style.display = config.showPortofolio ? '' : 'none';
@@ -246,6 +240,47 @@ async function initCMS() {
             const testiSkeleton = document.getElementById("testimonial-skeleton");
             if (testiSkeleton) testiSkeleton.style.display = 'none';
         }
+    }
+}
+
+// Run when DOM is fully loaded (safe for bottom-of-body scripts)
+async function initCMS() {
+    const hasCMS = typeof CMS_URL !== 'undefined' && !CMS_URL.includes("CONTOH");
+
+    if (!hasCMS) {
+        // Tidak ada CMS — langsung tampilkan semua
+        applyConfig({ showPortofolio: true, showTestimoni: true }, false);
+        return;
+    }
+
+    const cached = localStorage.getItem(PENGATURAN_CACHE_KEY);
+
+    if (cached) {
+        // Cache ada → visibility sudah dihandle inline script di <head>
+        // Langsung render konten CMS tanpa nunggu apapun
+        let config = { showPortofolio: true, showTestimoni: true };
+        try { config = JSON.parse(cached); } catch(e) {}
+
+        if (config.showPortofolio) renderPortofolio();
+        if (config.showTestimoni)  renderTestimoni();
+        renderKontak();
+
+        // Update cache di background (tidak blocking)
+        fetchCMSData("Pengaturan")
+            .then(data => {
+                if (data) localStorage.setItem(PENGATURAN_CACHE_KEY, JSON.stringify(parsePengaturan(data)));
+            })
+            .catch(() => {});
+
+    } else {
+        // Belum ada cache (visit pertama) → fetch config dulu, baru reveal
+        // Ini lambat hanya sekali, setelah itu selalu instant dari cache
+        const data    = await fetchCMSData("Pengaturan");
+        const config  = parsePengaturan(data);
+        localStorage.setItem(PENGATURAN_CACHE_KEY, JSON.stringify(config));
+
+        // Reveal section sesuai config (head script tidak punya cache tadi)
+        applyConfig(config, hasCMS);
     }
 }
 

@@ -26,6 +26,29 @@
     
     <!-- CMS Configuration -->
     <script src="cms-config.js"></script>
+
+    <!-- Inline config: jalan sebelum body render, zero flash -->
+    <script>
+    (function() {
+        try {
+            var cfg = JSON.parse(localStorage.getItem('bda_pengaturan_cache') || 'null');
+            if (cfg) {
+                var css = '';
+                if (!cfg.showPortofolio) css += '#galeri{display:none!important}';
+                if (!cfg.showTestimoni)  css += '#testimoni{display:none!important}';
+                if (cfg.showPortofolio)  css += '#galeri{display:block!important}';
+                if (cfg.showTestimoni)   css += '#testimoni{display:block!important}';
+                if (css) {
+                    var s = document.createElement('style');
+                    s.textContent = css;
+                    document.head.appendChild(s);
+                }
+            }
+            // Jika belum ada cache: section tetap tersembunyi (display:none di HTML)
+            // cms.js akan fetch & reveal setelah dapat data dari Sheets
+        } catch(e) {}
+    })();
+    </script>
 </head>
 <body>
 
